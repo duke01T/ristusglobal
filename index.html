@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RistusGlobal Bookstore</title>
+    <link rel="stylesheet" href="styles.css"> 
+ </head>
+<body>
+    <header>
+        <h1>RistusGlobal Bookstore</h1>
+        <nav>
+            <a href="#" onclick="navigate('home')">Home</a>
+            <div class="dropdown">
+                <a href="#" class="dropbtn">Categories</a>
+                <div class="dropdown-content">
+                    <a href="#" onclick="loadCategory('fiction')">Fiction</a>
+                    <a href="#" onclick="loadCategory('nonFiction')">Non-Fiction</a>
+                    <a href="#" onclick="loadCategory('children')">Children’s Books</a>
+                    <a href="#" onclick="loadCategory('sciFi')">Sci-Fi</a>
+                </div>
+            </div>
+            <a href="#" onclick="navigate('bestsellers')">Bestsellers</a>
+            <a href="#" onclick="navigate('newArrivals')">New Arrivals</a>
+            <a href="#" onclick="navigate('offers')">Offers</a>
+            <a href="#" onclick="navigate('contactUs')">Contact Us</a>
+            <a href="#" onclick="navigate('cart')">Cart (<span id="cart-count">0</span>)</a>
+            <a href="#" onclick="navigate('account')">Account</a>
+        </nav>
+    </header>
+
+    <section id="home" class="active container">
+        <div class="banner">
+            <h2>Welcome to RistusGlobal Bookstore</h2>
+            <p>Discover your next great read!</p>
+        </div>
+        <div class="grid" id="featured-books">
+            <!-- Featured Books will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <section id="category-books" class="container">
+        <h2 id="category-title"></h2>
+        <div class="grid" id="category-books-grid">
+            <!-- Books of the selected category will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <section id="bestsellers" class="container">
+        <h2>Bestsellers</h2>
+        <div class="grid" id="bestsellers-grid">
+            <!-- Bestsellers will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <section id="newArrivals" class="container">
+        <h2>New Arrivals</h2>
+        <div class="grid" id="new-arrivals-grid">
+            <!-- New Arrivals will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <section id="offers" class="container">
+        <h2>Special Offers</h2>
+        <div class="grid" id="offers-grid">
+            <!-- Offers will be dynamically inserted here -->
+        </div>
+    </section>
+
+    <section id="contactUs" class="container">
+        <h2>Contact Us</h2>
+        <form id="contact-form">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" required>
+            </div>
+            <div>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </section>
+
+    <section id="cart" class="container">
+        <h2>Shopping Cart</h2>
+        <div id="cart-items"></div>
+        <div id="cart-summary" class="hidden">
+            <p>Subtotal: $<span id="cart-subtotal">0.00</span></p>
+            <p>Tax: $<span id="cart-tax">0.00</span></p>
+            <p>Total: $<span id="cart-total">0.00</span></p>
+            <button onclick="navigate('checkout')">Proceed to Checkout</button>
+        </div>
+    </section>
+
+    <section id="checkout" class="container">
+        <h2>Checkout</h2>
+        <form id="checkout-form">
+            <div class="checkout-section">
+                <h3>Shipping Details</h3>
+                <div>
+                    <label for="shipping-name">Full Name:</label>
+                    <input type="text" id="shipping-name" name="shipping-name" required>
+                </div>
+                <div>
+                    <label for="shipping-address">Address:</label>
+                    <input type="text" id="shipping-address" name="shipping-address" required>
+                </div>
+                <div>
+                    <label for="shipping-city">City:</label>
+                    <input type="text" id="shipping-city" name="shipping-city" required>
+                </div>
+                <div>
+                    <label for="shipping-zip">Zip Code:</label>
+                    <input type="text" id="shipping-zip" name="shipping-zip" required>
+                </div>
+            </div>
+            <div class="checkout-section">
+                <h3>Payment Options</h3>
+                <div>
+                    <input type="radio" id="payment-credit-card" name="payment-method" value="credit-card" required>
+                    <label for="payment-credit-card">Credit Card</label>
+                </div>
+                <div>
+                    <input type="radio" id="payment-paypal" name="payment-method" value="paypal" required>
+                    <label for="payment-paypal">PayPal</label>
+                </div>
+            </div>
+            <button type="submit">Place Order</button>
+        </form>
+    </section>
+
+    <section id="account" class="container">
+        <h2>User Account</h2>
+        <p>User information and order history will be displayed here.</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 RstusGlobal Bookstore. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const books = {
+            featured: [
+                { title: "Featured Book 1", author: "Author 1", price: 19.99, image: "./images/fe1.webp" },
+                { title: "Featured Book 2", author: "Author 2", price: 24.99, image: "./images/fe2.webp" },
+                { title: "Featured Book 3", author: "Author 3", price: 14.99, image: "./images/fe3.webp" },
+                { title: "Featured Book 4", author: "Author 4", price: 29.99, image: "./images/fe4.webp" }
+            ],
+            fiction: [
+                { title: "Fiction Book 1", author: "Author 1", price: 19.99, image: "./images/f1.webp" },
+                { title: "Fiction Book 2", author: "Author 2", price: 24.99, image: "./images/f2.webp" },
+                { title: "Fiction Book 3", author: "Author 3", price: 14.99, image: "./images/f3.webp" },
+                { title: "Fiction Book 4", author: "Author 4", price: 29.99, image: "./images/f4.webp" },
+                { title: "Fiction Book 5", author: "Author 5", price: 9.99, image: "./images/f5.webp" }
+            ],
+            nonFiction: [
+                { title: "Non-Fiction Book 1", author: "Author 1", price: 19.99, image: "./images/nf1.webp" },
+                { title: "Non-Fiction Book 2", author: "Author 2", price: 24.99, image: "./images/nf2.webp" },
+                { title: "Non-Fiction Book 3", author: "Author 3", price: 14.99, image: "./images/nf3.webp" },
+                { title: "Non-Fiction Book 4", author: "Author 4", price: 29.99, image: "./images/nf4.webp" },
+                { title: "Non-Fiction Book 5", author: "Author 5", price: 9.99, image: "./images/nf4.webp" }
+            ],
+            children: [
+                { title: "Children's Book 1", author: "Author 1", price: 19.99, image: "./images/ch1.webp" },
+                { title: "Children's Book 2", author: "Author 2", price: 24.99, image: "./images/ch2.webp" },
+                { title: "Children's Book 3", author: "Author 3", price: 14.99, image: "./images/ch3.webp" },
+                { title: "Children's Book 4", author: "Author 4", price: 29.99, image: "./images/ch4.webp" },
+                { title: "Children's Book 5", author: "Author 5", price: 9.99, image: "./images/ch5.webp" }
+            ],
+            sciFi: [
+                { title: "Sci-Fi Book 1", author: "Author 1", price: 19.99, image: "./images/sc1.webp" },
+                { title: "Sci-Fi Book 2", author: "Author 2", price: 24.99, image: "./images/sc2.webp" },
+                { title: "Sci-Fi Book 3", author: "Author 3", price: 14.99, image: "./images/sc3.webp" },
+                { title: "Sci-Fi Book 4", author: "Author 4", price: 29.99, image: "./images/sc4.webp" },
+                { title: "Sci-Fi Book 5", author: "Author 5", price: 9.99, image: "./images/sc5.webp" }
+            ],
+            bestsellers: [
+                { title: "Bestseller 1", author: "Author 1", price: 19.99, image: "./images/bs1.webp" },
+                { title: "Bestseller 2", author: "Author 2", price: 24.99, image: "./images/bs2.webp" },
+                { title: "Bestseller 3", author: "Author 3", price: 14.99, image: "./images/bs3.webp" },
+                { title: "Bestseller 4", author: "Author 4", price: 29.99, image: "./images/bs4.webp" },
+                { title: "Bestseller 5", author: "Author 5", price: 9.99, image: "./images/bs5.webp" }
+            ],
+            newArrivals: [
+                { title: "New Arrival 1", author: "Author 1", price: 19.99, image: "./images/na1.webp" },
+                { title: "New Arrival 2", author: "Author 2", price: 24.99, image: "./images/na2.webp" },
+                { title: "New Arrival 3", author: "Author 3", price: 14.99, image: "./images/na3.webp" },
+                { title: "New Arrival 4", author: "Author 4", price: 29.99, image: "./images/na4.webp" },
+                { title: "New Arrival 5", author: "Author 5", price: 9.99, image: "./images/na5.webp" }
+            ],
+            offers: [
+                { title: "Offer 1", author: "Author 1", price: 19.99, image: "./images/o1.webp" },
+                { title: "Offer 2", author: "Author 2", price: 24.99, image: "./images/o2.webp" },
+                { title: "Offer 3", author: "Author 3", price: 14.99, image: "./images/o3.webp" },
+                { title: "Offer 4", author: "Author 4", price: 29.99, image: "./images/o4.webp" },
+                { title: "Offer 5", author: "Author 5", price: 9.99, image: "./images/05.webp" }
+            ]
+        };
+
+        function navigate(pageId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'cart') {
+                loadCart();
+            }
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function addToCart(book) {
+            const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+            cart.push(book);
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+        }
+
+        function loadBooks(category, gridId) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+            books[category].forEach(book => {
+                const bookElement = document.createElement('div');
+                bookElement.classList.add('grid-item');
+                bookElement.innerHTML = `
+                    <img src="${book.image}" alt="${book.title}">
+                    <h3>${book.title}</h3>
+                    <p>${book.author}</p>
+                    <p>$${book.price.toFixed(2)}</p>
+                    <button onclick='addToCart(${JSON.stringify(book)})'>Add to Cart</button>
+                `;
+                grid.appendChild(bookElement);
+            });
+        }
+
+        function loadCategory(category) {
+            document.getElementById('category-title').innerText = category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1');
+            loadBooks(category, 'category-books-grid');
+            navigate('category-books');
+        }
+
+        function loadCart() {
+            const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
+
+            cart.forEach(book => {
+                const item = document.createElement('div');
+                item.classList.add('cart-item');
+                item.innerHTML = `
+                    <span>${book.title} - $${book.price.toFixed(2)}</span>
+                    <button onclick='removeFromCart("${book.title}")'>Remove</button>
+                `;
+                cartItemsContainer.appendChild(item);
+                subtotal += book.price;
+            });
+
+            if (cart.length > 0) {
+                document.getElementById('cart-summary').classList.remove('hidden');
+                const tax = subtotal * 0.1;
+                const total = subtotal + tax;
+                document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
+                document.getElementById('cart-tax').innerText = tax.toFixed(2);
+                document.getElementById('cart-total').innerText = total.toFixed(2);
+            } else {
+                document.getElementById('cart-summary').classList.add('hidden');
+            }
+        }
+
+        function removeFromCart(title) {
+            let cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+            cart = cart.filter(book => book.title !== title);
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            loadCart();
+        }
+
+        function checkout() {
+            alert('Proceeding to checkout...');
+            sessionStorage.removeItem('cart');
+            updateCartCount();
+            navigate('checkout');
+        }
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thank you for contacting us!');
+            this.reset();
+        });
+
+        document.getElementById('checkout-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Thank you for your order!');
+            this.reset();
+            navigate('home');
+        });
+
+        window.onload = function() {
+            updateCartCount();
+            loadBooks('featured', 'featured-books');
+            loadBooks('bestsellers', 'bestsellers-grid');
+            loadBooks('newArrivals', 'new-arrivals-grid');
+            loadBooks('offers', 'offers-grid');
+            loadCart();
+        };
+    </script>
+</body>
+</html>
